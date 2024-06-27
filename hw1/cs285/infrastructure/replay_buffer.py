@@ -27,6 +27,9 @@ class ReplayBuffer(object):
 
         # add new rollouts into our list of rollouts
         for path in paths:
+            if not all(key in path for key in ["observation", "action", "reward", "next_observation", "terminal"]):
+                # raise KeyError("One or more paths are missing required keys.")
+                continue
             self.paths.append(path)
 
         # convert new rollouts into their component arrays, and append them onto
@@ -58,5 +61,5 @@ class ReplayBuffer(object):
             )[-self.max_size:]
             self.terminals = np.concatenate(
                 [self.terminals, terminals]
-            )[-self.max_size:]
+            )[-self.max_size:] 
 
